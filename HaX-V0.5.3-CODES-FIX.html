@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HaX V0.5.3</title>
+<style>
+:root{--g:#00ff41;--gd:#001600;--r:#ff4545;--bg:#000}*{box-sizing:border-box}body{margin:0;background:#000;color:var(--g);font-family:"Courier New",Courier,monospace;font-size:16px;text-shadow:0 0 5px var(--g);overflow:hidden}body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(#00ff4109 1px,transparent 1px),linear-gradient(90deg,#00ff4109 1px,transparent 1px);background-size:35px 35px;pointer-events:none}.top{height:100px;border-bottom:1px solid var(--g);display:flex;align-items:center;justify-content:space-between;padding:0 25px;background:#001000ee}.logo{font-size:42px;font-weight:900;letter-spacing:-5px;line-height:1}.logo .a{display:inline-block;position:relative;transform:skewX(-7deg) translateY(1px);filter:drop-shadow(2px 0 0 #007d20)}.logo .a:after{content:"x";position:absolute;left:50%;top:52%;transform:translate(-50%,-50%) skewX(7deg);font-size:15px;color:#000;text-shadow:none;font-weight:900}.balance{text-align:right}.balance b{font-size:25px}.small{font-size:11px;opacity:.65}.history{margin-top:5px;padding:4px 8px;font-size:10px}.ycToggle{cursor:pointer;user-select:none}.terminal{position:absolute;top:130px;left:50%;transform:translateX(-50%);width:min(700px,88%);border:1px solid var(--g);padding:22px;background:#001000b0;line-height:1.7}button{font-family:"Courier New",Courier,monospace;font-size:14px;font-weight:bold;color:var(--g);background:var(--gd);border:2px solid var(--g);padding:12px;cursor:pointer;text-transform:uppercase;box-shadow:0 0 8px #00ff4144}button:hover:not(:disabled){background:var(--g);color:#000}button:disabled{opacity:.35;cursor:not-allowed}.leftBtns,.rightBtns{position:fixed;bottom:25px;display:flex;flex-direction:column;gap:10px}.leftBtns{left:25px}.rightBtns{right:25px}.mainbtn{width:180px;height:58px}.hack{height:75px;font-size:20px}.firewall{border-color:#ff3131;color:var(--r);text-shadow:0 0 5px #f33;box-shadow:0 0 8px #f334}.middleBtns{position:fixed;left:50%;bottom:25px;transform:translateX(-50%);display:flex;gap:10px}.overlay{display:none;position:fixed;inset:0;background:#000a;z-index:20}.win{display:none;position:fixed;z-index:30;top:50%;left:50%;transform:translate(-50%,-50%);width:min(760px,92vw);max-height:82vh;background:#020902;border:2px solid var(--g);box-shadow:0 0 30px #00ff4166}.title{height:42px;background:#001b07;border-bottom:1px solid var(--g);display:flex;justify-content:space-between;align-items:center;padding-left:14px}.close{height:100%;width:50px;border:0;border-left:1px solid var(--g);font-size:20px}.content{padding:18px;overflow:auto;max-height:calc(82vh - 42px)}.card{border:1px solid #00ff4188;padding:15px;margin:12px 0}.card h3{margin:0 0 7px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.red{border-color:#ff3131}.red .title{border-color:#ff3131;background:#190000;color:var(--r)}.red .close{border-color:#ff3131;color:var(--r)}.notice{color:var(--r);text-shadow:0 0 6px red}.gain{position:fixed;font-weight:bold;pointer-events:none;z-index:50;animation:up .8s forwards}@keyframes up{to{opacity:0;transform:translateY(-60px)}}input{background:#000;color:var(--g);border:1px solid var(--g);padding:9px;font:inherit;width:100%}.mission{cursor:pointer}.mission:hover{background:#002b0c}.problem{font-size:24px;text-align:center;margin:20px}.statusline{opacity:.7;font-size:12px}.danger{border-color:#ff3131;color:#ff4545}.center{text-align:center}.resetReady{border-color:#ffe600;color:#ffe600}.hidden{display:none!important}@media(max-width:700px){.terminal{top:120px}.mainbtn{width:140px}.leftBtns{left:10px;bottom:10px}.rightBtns{right:10px;bottom:10px}.middleBtns{bottom:100px}.top{padding:0 12px}.logo{font-size:34px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div><div class="logo" aria-label="HaX">H<span class="a">a</span>X</div><button class="history" style="margin-top:7px" onclick="openCodesWindow()">CODES</button></div>
+  <div class="balance">
+    <span class="small">CRYPTO-BIT BALANCE</span><br><b id="bal">$0</b><br>
+    <span id="ycArea" class="small hidden"><span class="ycToggle" onclick="toggleYC()">[+] YENCOIN</span><span id="ycValue" class="hidden">: ¥0</span><br></span>
+    <div style="display:flex;gap:6px;justify-content:flex-end"><button class="history" onclick="openWin('historyWin');renderHistory()">UPGRADE HISTORY</button><button class="history" onclick="openWin('achWin');renderAchievements()">ACHIEVEMENTS</button></div>
+  </div>
+</header>
+<main class="terminal"><div class="small">root@HaX:~/network <span style="float:right">v0.5.3</span></div><hr><p>&gt; Secure connection initialized...</p><p>&gt; Crypto-Bit miner ready.</p><p id="sys" class="statusline">[SYSTEM] Hack to generate Crypto-Bit.</p><p>root@HaX:~$ █</p></main>
+<div class="leftBtns"><button id="resetBtn" class="mainbtn resetReady hidden" onclick="attemptReset()">RESET</button><button class="mainbtn" onclick="openElite()">ELITE HaX</button><button class="mainbtn" onclick="openWin('upWin');renderUpgrades()">UPGRADES</button></div>
+<div class="middleBtns"><button id="permBtn" class="mainbtn hidden" onclick="openWin('permWin');renderPerms()">PERMANENT UPGRADES</button><button id="metubeBtn" class="mainbtn hidden" onclick="openWin('metubeWin');renderMeTube()">MeTube</button></div>
+<div class="rightBtns"><button class="mainbtn firewall" onclick="openWin('fwWin');renderFirewall()">FIREWALL</button><button id="hack" class="mainbtn hack" onclick="doHack()">HACK</button></div>
+<div id="overlay" class="overlay"></div>
+<div id="upWin" class="win"><div class="title">UPGRADES.exe<button class="close" onclick="closeWins()">×</button></div><div id="upContent" class="content"></div></div>
+<div id="historyWin" class="win"><div class="title">UPGRADE_HISTORY.log<button class="close" onclick="closeWins()">×</button></div><div class="content"><input id="histSearch" placeholder="Search by upgrade name or number..." oninput="renderHistory()"><div id="histContent"></div></div></div>
+<div id="achWin" class="win"><div class="title">ACHIEVEMENTS.log<button class="close" onclick="closeWins()">×</button></div><div id="achContent" class="content"></div></div>
+<div id="codesWin" class="win">
+  <div class="title">CODES.exe<button class="close" onclick="closeWins()">×</button></div>
+  <div class="content">
+    <p class="small">Enter a HaX code below.</p>
+    <input id="codeInput" type="text" autocomplete="off" spellcheck="false" placeholder="ENTER CODE"
+           onkeydown="if(event.key==='Enter')submitCode()">
+    <br><br>
+    <button onclick="submitCode()">SUBMIT CODE</button>
+    <p id="codeStatus" class="statusline"></p>
+  </div>
+</div>
+<div id="fwWin" class="win red"><div class="title">FIREWALL.exe<button class="close" onclick="closeWins()">×</button></div><div id="fwContent" class="content"></div></div>
+<div id="eliteWin" class="win"><div class="title">ELITE_HaX.exe<button class="close" onclick="closeWins()">×</button></div><div id="eliteContent" class="content"></div></div>
+<div id="permWin" class="win"><div class="title">PERMANENT_UPGRADES.sys<button class="close" onclick="closeWins()">×</button></div><div id="permContent" class="content"></div></div>
+<div id="metubeWin" class="win"><div class="title">MeTube.exe<button class="close" onclick="closeWins()">×</button></div><div id="metubeContent" class="content"></div></div>
+<script>
+const K='HaXGameV05';
+let old=JSON.parse(localStorage.getItem('HaXGameV04')||'null')||JSON.parse(localStorage.getItem('cbGameV03')||'null');
+let d=JSON.parse(localStorage.getItem(K)||'null')||old||{cb:0,yc:0,safety:100,owned:{},perm:{},hackCount:0,raidUntil:0,eliteCooldown:0,eliteRefresh:0,missions:[],passesDay:'',passes:0,resets:0,resetUnlockAt:0,meTubeReadyAt:0,ycCollapsed:true};
+d.yc=d.yc||0;d.perm=d.perm||{};d.resets=d.resets||0;d.resetUnlockAt=d.resetUnlockAt||0;d.meTubeReadyAt=d.meTubeReadyAt||0;if(d.ycCollapsed===undefined)d.ycCollapsed=true;
+d.ach=d.ach||{};d.minedCB=d.minedCB||0;d.minedYC=d.minedYC||0;d.achievementHackBonus=d.achievementHackBonus||0;
+d.permanentHackBonus=d.permanentHackBonus||0;d.testMode=d.testMode||false;d.testUsed=d.testUsed||false;d.stompUntil=d.stompUntil||0;
+const upgrades={
+1:{n:"0's, 1's, and 2's!",base:30,max:1,desc:'Clicks are now more effective... Most of the time.',effect:'Each click: 1% → 0 Crypto-Bit, 32% → 1 Crypto-Bit, 67% → 2 Crypto-Bit.'},
+2:{n:'Malware 102',base:69,max:5,desc:'Malware can help you automine 0.1 Crypto-Bit/Sec!',effect:'+0.1 Crypto-Bit/sec per level.'},
+3:{n:'Hacker! (No duh)',base:404,max:1,req:()=>lvl(1)>0,desc:'Better Mouse=Better Clicks.',effect:'Replaces Upgrade #1 RNG. Every click is guaranteed to give at least 2 Crypto-Bit before other modifiers.'},
+4:{n:'Click on This Suspicious Ad!',base:666,max:1,req:()=>lvl(2)>0,desc:'Those pop-up ads you see in the internet......',effect:'Every 10th manual Hack is a Golden Click worth ×3 its predetermined value.'},
+5:{n:'EZPZ',base:1000,max:Infinity,desc:'Base value of every click is INCREASED by 0.1x.',effect:'Adds +0.1× to click value per level; rounds up to tenths.'},
+6:{n:'NotInternetExplorer',base:1300,max:1,req:()=>lvl(4)>0,desc:'I told you, Mom!',effect:'Every Hack makes the next Hack +0.00001% stronger; final reward rounds up to whole Crypto-Bit.'},
+7:{n:'FPS Enhancer',base:1500,max:Infinity,desc:'Time to start Dashing in Geometric style!',effect:'Raises maximum Crypto-Bit balance by 5,000 per level.'},
+8:{n:'Reset Reduction',base:1500,max:1,desc:'A-Z, back to A!',effect:'Unlocks Reset for this save after a 3-minute activation wait.'},
+9:{n:'Ping-PONG',base:500,max:2,req:()=>lvl(5)>0,desc:"It's like Pong, but using other's Ping! Get it?",effect:'Adds +2 to the base Hack value per level.'},
+10:{n:'MeTube',base:1000,max:1,req:()=>d.resets>=1,desc:"It's for ME, not YOU.",effect:'Unlocks MeTube. Posting takes 10 seconds and pays a base 30 Crypto-Bit.'},
+11:{n:'Unconventional Chud Labor',base:100,max:10,req:()=>lvl(2)>=2,desc:"Technically, forcing random Discord Mods to work 25 hours a day isn't illegal, right???",effect:'Every 5 seconds, grants 1 Crypto-Bit per level.'},
+12:{n:'ILikeMiners',base:3000,max:5,req:()=>lvl(4)>0&&d.resets>=1,desc:"\"No, that's La Peace\" - Kai Cenat",effect:'An autoclicker performs one Hack every 0.75 seconds per level.'},
+13:{n:'PermaPerv',base:1000,max:1,permanent:true,desc:'Ok, this is getting WEIRD, but I guess not too bad???',effect:'Permanently unlocks the Permanent Upgrades menu.'},
+14:{n:'HTML 001',baseYC:1,max:1,req:()=>perm(3)>0,desc:'[Classified Information. Awaiting to be revealed]',effect:'All Crypto-Bit gained from any method is multiplied by 1.5; rounds to tenths.'},
+15:{n:'FireDox',base:3333,max:1,req:()=>lvl(9)>0,desc:'The "Best" application ever!',effect:'Firewall Safety loss is reduced by 50%, rounded to a whole percent.'},
+16:{n:'Mine-Craft',base:100,max:1,req:()=>d.resets>=5,desc:'Hard-Core.',effect:'Every non-Hack button click grants 0.1 Crypto-Bit.'},
+17:{n:'Spot-Em-(And Magni)Fy',base:5000,max:1,req:()=>d.resets>=2&&lvl(12)>0,desc:'[Insert Corny Pun Just to Listen to it]',effect:'Elite HaX mission rewards are increased by 20%.'},
+18:{n:'Godzilla',base:10000,altYC:10,max:1,req:()=>Object.values(d.perm).some(Boolean),desc:'Did you know as of September 20, 2026, there are 38 Godzilla Movies?',effect:'Each Hack has a 2.5% chance to Stomp for ×10 its predetermined value and then gives Hack a 1-second cooldown.'},
+19:{n:'Emulator 1#',baseYC:25,max:1,permanent:true,req:()=>d.resets>=5&&lvl(8)>0,desc:'I Like Playing Pokemon on This-Nobody',effect:'After buying Reset Reduction, its Reset activation time is 10% shorter.'}
+};
+const perms={
+1:{n:'rickrollnet',cost:7500,desc:'Never Gonna Give You Up.',effect:'After every Reset, Upgrade #1 and Upgrade #3 remain purchased.'},
+2:{n:'Analog Horror 101',cost:15000,desc:'Five Nights At [Classified] is the name!',effect:'Default maximum CB balance becomes 10,000.'},
+3:{n:'CryptoWars: A New Hope',cost:20000,desc:'The Sequels are VERY bad.',effect:'Every 100 manual Hack clicks grants 1 YenCoin (YC).'}
+};
+function lvl(i){return d.owned[i]||0}function perm(i){return d.perm[i]||0}function save(){localStorage.setItem(K,JSON.stringify(d))}
+function round10(x){return Math.ceil((x-1e-9)*10)/10}
+function fmt(x){return x===Infinity?'∞':x.toLocaleString(undefined,{maximumFractionDigits:1})}
+function maxBal(){if(d.testMode)return Infinity;return (perm(2)?10000:3000)+5000*lvl(7)+(d.ach[4]?3000:0)}
+function cap(){if(!d.testMode)d.cb=Math.min(d.cb,maxBal())}
+function resetProd(){return Math.pow(1.1,d.resets)}
+function gainMult(){return resetProd()*(lvl(14)?1.5:1)}
+function addCB(raw,whole=false){
+  if(Date.now()<d.raidUntil)return 0;
+  let v=raw*gainMult();v=whole?Math.ceil(v):round10(v);
+  d.cb+=v;d.minedCB+=v;cap();checkAchievements();update();return v
+}
+function addYC(v){d.yc+=v;d.minedYC+=v;checkAchievements();update()}
+function update(){
+  cap();
+  document.getElementById('bal').textContent='$'+fmt(d.cb);
+  document.getElementById('hack').disabled=Date.now()<d.raidUntil||Date.now()<d.stompUntil;
+  document.getElementById('resetBtn').classList.toggle('hidden',!lvl(8));
+  document.getElementById('permBtn').classList.toggle('hidden',!lvl(13)&&!d.testMode);
+  document.getElementById('metubeBtn').classList.toggle('hidden',!lvl(10));
+  document.getElementById('ycArea').classList.toggle('hidden',!perm(3)&&!d.testMode);
+  document.getElementById('ycValue').textContent=': ¥'+fmt(d.yc);
+  document.getElementById('ycValue').classList.toggle('hidden',d.ycCollapsed);
+  document.querySelector('.ycToggle')&&(document.querySelector('.ycToggle').textContent=(d.ycCollapsed?'[+]':'[-]')+' YENCOIN');
+  save()
+}
+function toggleYC(){d.ycCollapsed=!d.ycCollapsed;update()}
+function priceDiscount(){return Math.max(0,1-.005*d.resets)}
+function cost(i){let u=upgrades[i];if(u.baseYC)return u.baseYC;return round10(u.base*Math.pow(5,lvl(i))*priceDiscount())}
+function available(i){let u=upgrades[i];return lvl(i)<u.max&&(d.testMode||!u.req||u.req())}
+function openWin(id){document.getElementById('overlay').style.display='block';document.getElementById(id).style.display='block'}function closeWins(){document.getElementById('overlay').style.display='none';document.querySelectorAll('.win').forEach(x=>x.style.display='none')}
+function renderUpgrades(){
+  let h='';
+  for(let i=1;i<=19;i++){
+    if(!available(i))continue;
+    let u=upgrades[i],c=cost(i),currency=u.baseYC?'YC':'Crypto-Bit',can=d.testMode||(u.baseYC?d.yc>=c:d.cb>=c);
+    let buyUI;
+    if(i===18){
+      buyUI=`<div style="display:flex;gap:6px"><button ${(d.testMode||d.cb>=c)?'':'disabled'} onclick="buy(18,'cb')">BUY $${fmt(c)}</button><button ${(d.testMode||d.yc>=10)?'':'disabled'} onclick="buy(18,'yc')">BUY ¥10</button></div>`;
+    }else buyUI=`<button ${can?'':'disabled'} onclick="buy(${i})">BUY</button>`;
+    h+=`<div class="card"><h3>Upgrade #${i}: ${u.n}</h3><p>${u.desc}</p><div class="row"><span>COST: ${u.baseYC?'¥':'$'}${fmt(c)} ${currency}${i===18?' OR ¥10 YC':''}<br>OWNED: ${lvl(i)}${u.max!==Infinity?'/'+u.max:''}${u.permanent?'<br>[PERSISTS THROUGH RESET]':''}</span>${buyUI}</div></div>`
+  }
+  document.getElementById('upContent').innerHTML=h||'<p>No upgrades are currently available.</p>'
+}
+function buy(i,method=''){
+  if(!available(i))return;
+  let u=upgrades[i],c=cost(i);
+  if(!d.testMode){
+    if(i===18&&method==='yc'){if(d.yc<10)return;d.yc-=10}
+    else if(u.baseYC){if(d.yc<c)return;d.yc-=c}
+    else{if(d.cb<c)return;d.cb-=c}
+  }
+  d.owned[i]=lvl(i)+1;
+  if(i===8)d.resetUnlockAt=Date.now()+resetChargeMs();
+  update();renderUpgrades()
+}
+function renderHistory(){let q=(document.getElementById('histSearch')?.value||'').trim().toLowerCase(),h='';for(let i=1;i<=19;i++){if(!lvl(i))continue;let u=upgrades[i];let searchable=(u.n+' upgrade #'+i+' #'+i).toLowerCase();if(searchable.includes(q))h+=`<div class="card"><h3>Upgrade #${i}: ${u.n}</h3><p>${u.effect}</p><span class="small">OWNED: ${lvl(i)}</span></div>`}document.getElementById('histContent').innerHTML=h||'<p>No matching purchased upgrades.</p>'}
+function baseHack(){
+  let r=1+d.resets+d.achievementHackBonus+d.permanentHackBonus+2*lvl(9);
+  if(lvl(3))r=Math.max(r,2+d.resets+d.achievementHackBonus+d.permanentHackBonus+2*lvl(9));
+  else if(lvl(1)){
+    let x=Math.random()*100,roll=x<1?0:x<33?1:2;
+    r=Math.max(0,roll+d.resets+d.achievementHackBonus+d.permanentHackBonus+2*lvl(9))
+  }
+  r=round10(r*(1+.1*lvl(5)));
+  if(lvl(6))r=Math.ceil(r*(1+d.hackCount*.0000001));
+  return r
+}
+function performHack(manual=true){
+  if(Date.now()<d.raidUntil||Date.now()<d.stompUntil)return;
+  let r=baseHack();d.hackCount++;
+  if(manual&&lvl(4)&&d.hackCount%10===0)r*=3;
+  let stomp=manual&&lvl(18)&&Math.random()<.025;
+  if(stomp){r*=10;d.stompUntil=Date.now()+1000}
+  let gained=addCB(r,true);
+  if(manual&&perm(3)&&d.hackCount%100===0)addYC(1);
+  if(manual){
+    let b=document.getElementById('hack').getBoundingClientRect(),g=document.createElement('div');
+    g.className='gain';g.textContent=(stomp?'STOMP! ':'')+'+$'+fmt(gained);
+    g.style.left=(b.left+b.width/2)+'px';g.style.top=(b.top-10)+'px';
+    document.body.appendChild(g);setTimeout(()=>g.remove(),800)
+  }
+  update()
+}
+function doHack(){performHack(true)}
+function renderFirewall(){let raid=Math.max(0,Math.ceil((d.raidUntil-Date.now())/1000));document.getElementById('fwContent').innerHTML=`<h2>SAFETY: ${d.safety}%</h2><p>Transfer Crypto-Bit into firewall protection.</p><p>1 Safety% = 2 Crypto-Bit</p><input id="safeAmt" type="number" min="1" max="${100-d.safety}" placeholder="Safety % to purchase"><br><br><button onclick="buySafety()">TRANSFER</button>${raid?`<p class="notice">RAID ACTIVE — CB generation disabled for ${raid}s.</p>`:''}`}
+function buySafety(){let a=Math.floor(+document.getElementById('safeAmt').value);if(!a||a<1)return;a=Math.min(a,100-d.safety);if(d.cb<a*2)return;d.cb-=a*2;d.safety+=a;update();renderFirewall()}
+setInterval(()=>{if(Math.random()<.2){let loss=1+Math.floor(Math.random()*5);if(lvl(15))loss=Math.max(1,Math.round(loss*.5));d.safety=Math.max(0,d.safety-loss);}save()},15000);let lowTicks=0;setInterval(()=>{if(d.safety<=10&&Date.now()>=d.raidUntil){lowTicks++;let chance=1+Math.floor(lowTicks/5);if(Math.random()*100<chance){d.cb*=.3;d.raidUntil=Date.now()+30000;lowTicks=0;document.getElementById('sys').innerHTML='<span class="notice">[RAID NOTICE] 70% CB seized. Mining locked for 30 seconds.</span>'}}else lowTicks=0;update();if(document.getElementById('fwWin').style.display==='block'&&document.activeElement?.id!=='safeAmt')renderFirewall()},1000);
+setInterval(()=>{if(lvl(2))addCB(.1*lvl(2))},1000);setInterval(()=>{if(lvl(11))addCB(lvl(11))},5000);setInterval(()=>{if(lvl(12))for(let i=0;i<lvl(12);i++)performHack(false)},750);
+const nouns=['Bank','Store','RichGuy','Train','Cryptobase','Server','Vault','Market','Casino','Company','Wallet','Exchange'];function missionName(){return nouns[Math.floor(Math.random()*nouns.length)]+'_'+String(Math.floor(Math.random()*1000)).padStart(3,'0')}function refreshMissions(){let ps=[.2,.33,.5,.69,.66,.7,.75,.1];d.missions=Array.from({length:3},()=>({name:missionName(),reward:Math.ceil(d.cb*ps[Math.floor(Math.random()*ps.length)])}));d.eliteRefresh=Date.now()+1800000;save()}function day(){return new Date().toISOString().slice(0,10)}
+function openElite(){openWin('eliteWin');if(d.passesDay!==day()){d.passesDay=day();d.passes=0}if(!d.missions.length||Date.now()>=d.eliteRefresh)refreshMissions();renderElite()}
+function renderElite(){let cd=Math.max(0,Math.ceil((d.eliteCooldown-Date.now())/60000));let h=`<p>DAILY PASSES: ${d.passes}/5</p>`;if(cd>0)h+=`<p class="notice">COOLDOWN: ${cd} minute(s)</p>`;else if(d.passes>=5)h+='<p>Daily mission pass limit reached.</p>';else d.missions.forEach((m,i)=>h+=`<div class="card mission" onclick="startMission(${i})"><h3>${m.name}</h3><p>REWARD: $${m.reward.toLocaleString()}</p></div>`);h+=`<p class="small">Mission list refresh: ${Math.max(0,Math.ceil((d.eliteRefresh-Date.now())/60000))} min</p>`;document.getElementById('eliteContent').innerHTML=h}
+let active=null;function problem(k){if(k===4){let roots=[];for(let r=11;r*r<2000;r++)if(r*r>100)roots.push(r);let root=roots[Math.floor(Math.random()*roots.length)];return{q:`√${root*root}`,a:root}}let a=10+Math.floor(Math.random()*90),b=10+Math.floor(Math.random()*90),op=['×','+','−'][Math.floor(Math.random()*3)];return{q:`${a} ${op} ${b}`,a:op==='×'?a*b:op==='+'?a+b:a-b}}
+function startMission(i){if(Date.now()<d.eliteCooldown||d.passes>=5)return;active={m:d.missions[i],step:0,problems:Array.from({length:5},(_,k)=>problem(k))};showProblem()}function showProblem(){let p=active.problems[active.step];document.getElementById('eliteContent').innerHTML=`<h2>${active.m.name}</h2><p>TASK ${active.step+1}/5</p><div class="problem">${p.q} = ?</div><input id="ans" type="number" autofocus><br><br><button onclick="answer()">SUBMIT</button><p class="small">One wrong answer fails the entire mission.</p>`;setTimeout(()=>document.getElementById('ans')?.focus(),0)}
+function answer(){let v=Number(document.getElementById('ans').value),p=active.problems[active.step];if(v!==p.a){d.eliteCooldown=Date.now()+1800000;save();active=null;renderElite();return}active.step++;if(active.step<5){showProblem();return}addCB(active.m.reward*(lvl(17)?1.2:1),true);d.passes++;d.eliteCooldown=Date.now()+600000;active=null;update();renderElite()}
+function renderPerms(){let h='';for(let i=1;i<=3;i++){let p=perms[i];if(perm(i)){h+=`<div class="card"><h3>Permanent Upgrade #${i}: ${p.n}</h3><p>${p.desc}</p><p class="small">OWNED — ${p.effect}</p></div>`;continue}h+=`<div class="card"><h3>Permanent Upgrade #${i}: ${p.n}</h3><p>${p.desc}</p><div class="row"><span>COST: $${p.cost.toLocaleString()}</span><button ${(!d.testMode&&d.cb<p.cost)?'disabled':''} onclick="buyPerm(${i})">BUY</button></div></div>`}document.getElementById('permContent').innerHTML=h}
+function buyPerm(i){let p=perms[i];if(perm(i)||(!d.testMode&&d.cb<p.cost))return;if(!d.testMode)d.cb-=p.cost;d.perm[i]=1;update();renderPerms();renderUpgrades()}
+function renderMeTube(){let now=Date.now(),h='<h2>MeTube</h2>';if(!d.meTubeReadyAt)h+=`<p>Post a video, wait 10 seconds, then return to collect its earnings.</p><button onclick="startVideo()">POST VIDEO</button>`;else if(now<d.meTubeReadyAt)h+=`<p>Uploading/rendering...</p><button disabled>READY IN ${Math.ceil((d.meTubeReadyAt-now)/1000)}s</button>`;else h+=`<p>Your video is ready!</p><button onclick="collectVideo()">READY! +$30 BASE</button>`;document.getElementById('metubeContent').innerHTML=h}function startVideo(){if(d.meTubeReadyAt)return;d.meTubeReadyAt=Date.now()+10000;save();renderMeTube()}function collectVideo(){if(!d.meTubeReadyAt||Date.now()<d.meTubeReadyAt)return;d.meTubeReadyAt=0;addCB(30);renderMeTube()}
+function resetChargeMs(){return 180000*(lvl(19)?0.9:1)}
+function attemptReset(){
+  if(!lvl(8))return;
+  let left=d.resetUnlockAt-Date.now();
+  if(left>0){alert('Reset Reduction is still initializing. Reset unlocks in '+Math.ceil(left/1000)+' second(s).');return}
+  if(!confirm('Are you Sure??? Reset this save?'))return;
+  if(!confirm('Are you Sure??? REALLY reset? This erases normal upgrades and current progression.'))return;
+  let keep1=perm(1)?1:0,keep3=perm(1)?1:0,keep13=lvl(13)?1:0,keep19=lvl(19)?1:0;
+  let wasTest=d.testMode;
+  d.resets++;
+  d.cb=0;d.safety=100;d.raidUntil=0;d.eliteCooldown=0;d.eliteRefresh=0;d.missions=[];d.passes=0;d.passesDay='';
+  d.hackCount=0;d.meTubeReadyAt=0;d.minedCB=0;d.minedYC=0;d.ach={};d.achievementHackBonus=0;d.owned={};d.resetUnlockAt=0;d.stompUntil=0;
+  if(wasTest){
+    d.perm={};d.testMode=false;d.testUsed=false;d.permanentHackBonus=0;
+  }else{
+    if(keep1)d.owned[1]=1;if(keep3)d.owned[3]=1;if(keep13)d.owned[13]=1;if(keep19)d.owned[19]=1;
+  }
+  closeWins();document.getElementById('sys').textContent=`[SYSTEM] Reset #${d.resets} complete. Production ×${resetProd().toFixed(2)}.`;
+  checkAchievements();update()
+}
+
+const achievements={
+1:{n:'Hello There!',req:'Mine one Crypto-Bit',reward:'10 Crypto-Bit'},
+2:{n:'Novice Mining',req:'Mine 500 Crypto-Bit',reward:'Full Safety% refill + 50 Crypto-Bit'},
+3:{n:'Mega Mining',req:'Mine 2,048 Crypto-Bit',reward:'Hack gives +1 Crypto-Bit/click until Reset'},
+4:{n:'Crypto-Bit Scalper',req:'Mine 5,000 Crypto-Bit',reward:'+3,000 max Crypto-Bit balance until Reset'},
+5:{n:'HOP OFF THE GAME BUDDY',req:'Mine 100,000 Crypto-Bit',reward:'None'},
+6:{n:'What is that?!',req:'Mine 1 YC',reward:'5,000 Crypto-Bit'},
+7:{n:'i am pro',req:'Mine 30 YC',reward:'10,000 Crypto-Bit + 5 YC'},
+8:{n:'Callback',req:'Reset once',reward:'100 Crypto-Bit'},
+9:{n:'Callback Hell',req:'Reset 10 times',reward:'1 YC'},
+10:{n:'Dimension 69',req:'Reset 100 times',reward:'Permanent +1 Crypto-Bit per Hack'}
+};
+let checkingAch=false;
+function achievementMet(i){
+  if(i===1)return d.minedCB>=1;if(i===2)return d.minedCB>=500;if(i===3)return d.minedCB>=2048;if(i===4)return d.minedCB>=5000;if(i===5)return d.minedCB>=100000;
+  if(i===6)return d.minedYC>=1;if(i===7)return d.minedYC>=30;if(i===8)return d.resets>=1;if(i===9)return d.resets>=10;if(i===10)return d.resets>=100;
+}
+function checkAchievements(){
+  if(checkingAch)return;checkingAch=true;
+  for(let i=1;i<=10;i++){
+    if(d.ach[i]||!achievementMet(i))continue;
+    d.ach[i]=1;
+    if(i===1)d.cb+=10;
+    if(i===2){d.safety=100;d.cb+=50}
+    if(i===3)d.achievementHackBonus+=1;
+    if(i===6)d.cb+=5000;
+    if(i===7){d.cb+=10000;d.yc+=5}
+    if(i===8)d.cb+=100;
+    if(i===9)d.yc+=1;
+    if(i===10)d.permanentHackBonus=1;
+    cap()
+  }
+  checkingAch=false;save()
+}
+function renderAchievements(){
+  checkAchievements();
+  let h='';
+  for(let i=1;i<=10;i++){
+    let a=achievements[i],done=!!d.ach[i];
+    h+=`<div class="card"><h3>${done?'✓ ':''}Achievement #${i}: ${a.n}</h3><div class="small">${a.req}</div><p>REWARD: ${a.reward}</p><div class="small">${done?'COMPLETED':'LOCKED'}</div></div>`
+  }
+  document.getElementById('achContent').innerHTML=h
+}
+function openCodesWindow(){
+  openWin('codesWin');
+  const input=document.getElementById('codeInput');
+  const status=document.getElementById('codeStatus');
+  input.value='';
+  status.textContent=d.testUsed?'[SYSTEM] TEST has already been used on this save.':'';
+  setTimeout(()=>input.focus(),0);
+}
+function submitCode(){
+  const input=document.getElementById('codeInput');
+  const status=document.getElementById('codeStatus');
+  const code=input.value.trim().toUpperCase();
+
+  if(!code){
+    status.textContent='[ERROR] Enter a code.';
+    return;
+  }
+
+  if(code!=='TEST'){
+    status.textContent='[ERROR] Invalid code.';
+    input.select();
+    return;
+  }
+
+  if(d.testUsed){
+    status.textContent='[ERROR] TEST has already been used on this save.';
+    return;
+  }
+
+  d.testUsed=true;
+  d.testMode=true;
+  d.cb=1000000000000;
+  d.yc=100000;
+  d.safety=100;
+  d.raidUntil=0;
+  d.stompUntil=0;
+
+  document.getElementById('sys').textContent='[TEST MODE] Conditions and currency caps bypassed for this save.';
+  status.textContent='[SUCCESS] TEST MODE ENABLED — $1,000,000,000,000 Crypto-Bit + ¥100,000 YC.';
+  update();
+  renderUpgrades();
+}
+document.addEventListener('click',e=>{
+  let b=e.target.closest('button');
+  if(!b||b.id==='hack'||!lvl(16))return;
+  addCB(.1)
+});
+
+update();checkAchievements();setInterval(()=>{if(document.getElementById('upWin').style.display==='block')renderUpgrades();if(document.getElementById('eliteWin').style.display==='block'&&!active)renderElite();if(document.getElementById('permWin').style.display==='block')renderPerms();if(document.getElementById('metubeWin').style.display==='block')renderMeTube()},1000);
+</script>
+</body>
+</html>
